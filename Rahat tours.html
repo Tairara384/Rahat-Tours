@@ -1,0 +1,180 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rahat Travel</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: linear-gradient(to bottom, #ffffff, #87CEEB);
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .sidebar h2 {
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: black;
+        }
+        .content {
+            margin-left: 270px;
+            width: 100%;
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .contact-number {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .login-container, .signup-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            display: inline-block;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+        .reviews {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="ad-container">
+            <img src="./images/toyota_voxy.jpg" alt="Toyota Voxy - RAHAT TRAVEL AND TOURS">
+            <h1>RAHAT TRAVEL</h1>
+            <p><em>Tour with confidence...</em></p>
+            <p class="contact-number">
+                <img src="./images/call_icon.png" alt="Call Icon"> +254 768035124
+            </p>
+            <p class="contact-number">
+                <img src="./images/whatsapp_icon.png" alt="WhatsApp Icon"> 
+                <a href='https://wa.me/254706735675' target='_blank'>+254 706735675 (WhatsApp)</a>
+            </p>
+        </div>
+        
+        <div class="login-container" id="login-container">
+            <h2>Login</h2>
+            <form onsubmit="return handleLogin(event)">
+                <input type="email" id="login-email" placeholder="Email or Phone Number" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <p id="login-error" class="error-message"></p>
+                <p>New user? <a href="#" onclick="showSignupForm()">Sign Up</a></p>
+            </form>
+        </div>
+
+        <div class="signup-container" id="signup-container" style="display: none;">
+            <h2>Sign Up</h2>
+            <form onsubmit="return handleSignup(event)">
+                <input type="text" id="firstname" placeholder="First Name" required>
+                <input type="text" id="lastname" placeholder="Last Name" required>
+                <input type="number" id="age" placeholder="Age (Optional)">
+                <input type="text" id="place" placeholder="Place (Optional)">
+                <input type="text" id="gender" placeholder="Gender (Optional)">
+                <input type="email" id="signup-email" placeholder="Email or Phone Number" required>
+                <input type="password" id="signup-password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        
+        <p class="user-info" id="user-info"></p>
+
+        <div class="reviews">
+            <h2>User Reviews</h2>
+            <textarea id="review-text" placeholder="Leave your feedback here..."></textarea>
+            <button onclick="submitReview()">Submit Review</button>
+            <div id="review-section"></div>
+        </div>
+    </div>
+  
+    <script>
+        function showSignupForm() {
+            document.getElementById("login-container").style.display = "none";
+            document.getElementById("signup-container").style.display = "block";
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            let firstName = document.getElementById("firstname").value;
+            let lastName = document.getElementById("lastname").value;
+            let email = document.getElementById("signup-email").value;
+            let password = document.getElementById("signup-password").value;
+            localStorage.setItem("userFirstName", firstName);
+            localStorage.setItem("userLastName", lastName);
+            localStorage.setItem("userEmail", email);
+            localStorage.setItem("userPassword", password);
+            document.getElementById("signup-container").style.display = "none";
+            document.getElementById("login-container").style.display = "block";
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            let email = document.getElementById("login-email").value;
+            let password = document.getElementById("login-password").value;
+            let storedEmail = localStorage.getItem("userEmail");
+            let storedPassword = localStorage.getItem("userPassword");
+            let firstName = localStorage.getItem("userFirstName");
+            let lastName = localStorage.getItem("userLastName");
+
+            if (email === storedEmail && password === storedPassword) {
+                document.getElementById("login-container").style.display = "none";
+                document.getElementById("user-info").innerHTML = `<h2><em>Welcome Mr. ${firstName} ${lastName}</em></h2>`;
+            } else {
+                document.getElementById("login-error").innerText = "Incorrect login details or account does not exist.";
+            }
+        }
+
+        function submitReview() {
+            let review = document.getElementById("review-text").value;
+            let reviewSection = document.getElementById("review-section");
+            if (review) {
+                reviewSection.innerHTML += `<p>${review}</p>`;
+                document.getElementById("review-text").value = "";
+            }
+        }
+    </script>
+</body>
+</html>
